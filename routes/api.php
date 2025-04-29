@@ -28,8 +28,5 @@ Route::group(['middleware'=> ['auth:sanctum']],function(){
     // api route to add bank acccount details 
     Route::post('/bank-accounts', [add_bank_accountController::class, 'bank_account']);
 
-
-
-
-
 });
+
