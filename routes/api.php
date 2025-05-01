@@ -25,8 +25,15 @@ Route::post('auth/login', [LoginController::class, 'login']);
 Route::group(['middleware'=> ['auth:sanctum']],function(){
     Route::get('/users', [RegisterController::class, 'getAllUsers']);
     Route::delete('/deleteUser/{email}', [RegisterController::class, 'deleteUser']);
-    // api route to add bank acccount details 
-    Route::post('/bank-accounts', [add_bank_accountController::class, 'bank_account']);
+    // api route for bank acccount details 
+    Route::post('auth/bank-account', [add_bank_accountController::class, 'store']);
+    Route::delete('auth/delete-account/{id}', [add_bank_accountController::class, 'destroy']);
+    Route::delete('auth/delete-accounts', [add_bank_accountController::class, 'destroyAll']);
+    Route::put('auth/bank-account/{id}', [add_bank_accountController::class, 'update']);
+
+
+
+    
 
 });
 

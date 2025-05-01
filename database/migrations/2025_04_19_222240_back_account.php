@@ -15,9 +15,9 @@ return new class extends Migration
         Schema::create('bank_accounts', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->string('account_name');
+            $table->string('account_name')->nullable();
             $table->string('account_number');
-            $table->string('bank_country');
+            $table->string('bank_country')->nullable();
             $table->string('bank_name');
             $table->timestamps();
         });

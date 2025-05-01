@@ -11,7 +11,8 @@ use Illuminate\Support\Facades\Auth;
 class add_bank_accountController extends Controller
 {
     //
-    public function bank_account(Request $request){
+    public function store(Request $request)
+    {
         $validated = $request->validate([
             'account_name' => 'required|string|max:255',
             'account_number' => 'required|string|size:10',
@@ -39,5 +40,74 @@ class add_bank_accountController extends Controller
                 'bank_name' => $bankAccount->bank_name,
             ]
         ], 201);
+    }
+
+    public function destroy($id)
+    {
+        $account = BankAccount::find($id);
+
+        if (!$account) {
+            return response()->json([
+                'message' => 'Bank account not found.'
+            ], 404);
+        } else {
+
+            if ($account->user_id !== Auth::user()->id) {
+                return response()->json(['message' => 'Unauthorized.'], 403);
+            } else {
+
+                $account->delete();
+
+                return response()->json([
+                    'message' => 'Bank account deleted successfully.'
+                ], 200);
+            }
+        }
+    }
+
+    public function destroyAll()
+    {
+        $user = Auth::user();
+
+        $deletedCount = BankAccount::where('user_id', $user->id)->delete();
+
+        return response()->json([
+            'message' => 'All your bank accounts have been deleted.',
+            'deleted_count' => $deletedCount
+        ], 200);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'bank_name' => 'required|string',
+            'bank_country' => 'required|string',
+            'account_number' => 'required|digits:10',
+            'account_name' => 'required|string',
+        ]);
+
+        $bankAccount = BankAccount::find($id);
+
+        if (!$bankAccount) {
+            return response()->json(['message' => 'Bank account not found.'], 404);
+        } else {
+
+            if ($bankAccount->user_id !== Auth::user()->id) {
+                return response()->json(['message' => 'Unauthorized.'], 403);
+            } else {
+
+                $bankAccount->update([
+                    'bank_name' => $request->bank_name,
+                    'bank_country' => $request->country,
+                    'account_number' => $request->account_number,
+                    'account_name' => $request->account_name,
+                ]);
+
+                return response()->json([
+                    'message' => 'Bank account updated successfully.',
+                    'data' => $bankAccount,
+                ]);
+            }
+        }
     }
 }
