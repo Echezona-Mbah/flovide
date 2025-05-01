@@ -39,7 +39,7 @@ class User extends Authenticatable
         'password',
         'email_verification_otp',
         'email_verification_otp_expires_at',
-        'bvn', 
+        'bvn',
         'typeofuser',
         'email_verified_status',
         'email_verification_attempts',
@@ -67,4 +67,14 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function bankAccounts()
+    {
+        return $this->hasMany(BankAccount::class);
+    }
+    public function subaccount()
+    {
+        return $this->hasMany(subaccount::class);
+    }
 }
+

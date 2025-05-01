@@ -42,6 +42,22 @@ class add_bank_accountController extends Controller
         ], 201);
     }
 
+    public function show()
+    {
+        // Get all Bank Account that belong to the authenticated user
+        $bankAccount = BankAccount::where('user_id', Auth::user()->id)->get();
+
+        if ($bankAccount->isEmpty()) {
+            return response()->json(['message' => 'No Bank Account found.'], 404);
+        }
+
+        return response()->json([
+            'message' => 'Bank Accounts retrieved successfully.',
+            'data' => $bankAccount,
+        ]);
+    }
+
+
     public function destroy($id)
     {
         $account = BankAccount::find($id);
@@ -98,8 +114,8 @@ class add_bank_accountController extends Controller
 
                 $bankAccount->update([
                     'bank_name' => $request->bank_name,
-                    'bank_country' => $request->country,
-                    'account_number' => $request->account_number,
+                    'bank_country' => $request->bank_country,
+                    'account_number' => Crypt::encryptString($request->account_number),
                     'account_name' => $request->account_name,
                 ]);
 

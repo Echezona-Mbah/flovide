@@ -2,27 +2,22 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class BankAccount extends Model
+class Subaccount extends Model
 {
-    use HasFactory;
-
-    //custom table name
-    protected $table = 'bank_accounts';
-
     protected $fillable = [
         'user_id',
-        'account_name',
         'account_number',
-        'bank_country',
+        'account_name',
         'bank_name',
+        'bank_country'
     ];
 
     protected $casts = [
         'account_number' => 'encrypted',
     ];
+
 
     public function user()
     {
